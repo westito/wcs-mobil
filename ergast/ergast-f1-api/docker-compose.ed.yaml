@@ -1,0 +1,5 @@
+version: "3.8"
+services:
+  ergastdb:
+    ports:
+      - "${DB_PORT}:3306"

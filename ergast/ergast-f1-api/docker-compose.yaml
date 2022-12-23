@@ -1,0 +1,27 @@
+services:
+  ergastdb:
+    container_name: ergastdb
+    build: ergastdb/
+    environment:
+      MYSQL_ROOT_PASSWORD: f1
+      MYSQL_DATABASE: ergastdb
+    expose:
+      - "3306"
+  web:
+    container_name: web
+    build: ./lamp
+    expose:
+      - "80"
+    ports:
+      - "${BE_PORT}:80"
+    volumes:
+      - ./webroot:/var/www/html
+      - ./php/api:/php/api
+    links:
+      - ergastdb
+    healthcheck:
+      test: [ "CMD", "curl", "-X", "GET", "-I", "-H", "Accept: text/html", "http://localhost/api/f1/seasons.json" ]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+
